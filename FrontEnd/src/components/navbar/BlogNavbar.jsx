@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Navbar } from "react-bootstrap";
+import { Button, Container, Navbar , Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./styles.css";
@@ -10,6 +10,11 @@ const NavBar = props => {
         <Navbar.Brand as={Link} to="/">
           <img className="blog-navbar-brand" alt="logo" src={logo} />
         </Navbar.Brand>
+        <Nav className="me-auto">
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/">Blog</Nav.Link>
+            <Nav.Link href="/author">Author</Nav.Link>
+        </Nav>
 
         <Button as={Link} to="/new" className="blog-navbar-add-button bg-dark" size="lg">
           <svg

@@ -7,12 +7,15 @@ import NewBlogPost from "./views/new/New";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
+  //verificare il login dell'utente 
+  //creare context
   return (
     <Router>
       <NavBar />
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/blog/:id" element={<Blog />} />
+        {/* <Route path="/author/:id" element={<Authors />} /> */}
         <Route path="/new" element={<NewBlogPost />} />
       </Routes>
       <Footer />
