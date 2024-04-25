@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 // import posts from "../../../data/posts.json";
 import BlogItem from "../blog-item/BlogItem";
 import { useState } from "react";
+import { API_URL } from "../../../globaldata/globaldata";
 //fare la fetch al datbase per recuperare i post
 
 
@@ -12,7 +13,7 @@ const BlogList = props => {
   async function downloadPosts(){
     //loader
     try {
-      let response= await fetch('http://localhost:3001/blogPosts');
+      let response= await fetch(API_URL+'/blogPosts');
       if(response.ok){
         setPosts(await response.json());
         console.log(posts);
@@ -25,7 +26,9 @@ const BlogList = props => {
       console.error(err)
     }
   }
-  downloadPosts();
+  useEffect(()=>{
+    downloadPosts();
+  },[])
   return (
     <Row>
       {posts.map((post, i) => (
