@@ -3,18 +3,17 @@ import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import BlogAuthor from "../blog-author/BlogAuthor";
 import "./styles.css";
-const BlogItem = (props) => {
-  console.log(props)
-  const { title, cover, author, _id } = props;
+const BlogItem = ({post}) => {
+  console.log(post)
   return (
-    <Link to={`/blog/${_id}`} className="blog-link">
+    <Link to={`/blog/${post._id}`} className="blog-link">
       <Card className="blog-card">
-        <Card.Img variant="top" src={cover} className="blog-cover" />
+        <Card.Img variant="top" src={post.cover} className="blog-cover" />
         <Card.Body>
-          <Card.Title>{title}</Card.Title>
+          <Card.Title>{post.title}</Card.Title>
         </Card.Body>
         <Card.Footer>
-          <BlogAuthor {...author} />
+          <BlogAuthor author={post.author} />
         </Card.Footer>
       </Card>
     </Link>

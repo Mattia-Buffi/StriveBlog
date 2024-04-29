@@ -28,21 +28,21 @@ export default function DashboardUser({isNew}) {
   const sendToServer= async (e)=>{
     e.preventDefault();
     let userBody={
-      "nome": nome,
-      "cognome": cognome,
-      "email": email,
-      "password":password,
-      "dataNascita": birth,
-      "description": descript,
+      nome: nome,
+      cognome: cognome,
+      email: email,
+      password:password,
+      dataNascita: birth,
+      description: descript,
+      avatar:null,
     }
-    console.log(e.target)
-    let formData= new FormData(e.target);
-    formData.append("avatar",avatarImg)
+    console.log(userBody);
+    console.log(API_URL)
     try {
       const response = await fetch(API_URL+'/authors/',{
         method:"POST",
-        body: formData,
-        headers:{ 'content-type': 'multipart/form-data' }
+        body: JSON.stringify(userBody),
+        headers:{ 'content-type': 'application/JSON' }
       })
       let result= await response.json();
       console.log(result);

@@ -5,6 +5,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import "./styles.css";
 import {convertToRaw} from "draft-js"
 import draftToHtml from "draftjs-to-html"
+import { API_URL } from "../../globaldata/globaldata";
 const NewBlogPost = props => {
   const [text, setText] = useState("");
   const handleChange = useCallback(value => {
@@ -13,9 +14,42 @@ const NewBlogPost = props => {
     console.log(text)
     // console.log(convertToRaw(value.getCurrentContent()))
   });
+  let newPost={
+    category: 'jhgjgj',
+    title: 'Prova',
+  cover: 'none',
+  readTime: {
+      value:1,
+      unit:'min',
+    },
+  author:'66296eb4d005f36612912d56',
+  content:'<p>gjgjgjgjgh</p>',
+  }
+  async function sendPost(e){
+    e.preventDefault();
+    try {
+      const response = await fetch(API_URL+'/blogPosts/',{
+        method:"POST",
+        body: JSON.stringify(newPost),
+        headers:{ 'content-type': 'application/JSON' }
+      })
+      let result= await response.json();
+      console.log(result);
+      if(response.ok){
+          //messaggio di evvenuto inserimento
+          
+      }else{
+          const error = new Error(`HTTP Error! Status: ${response.status}`)
+          error.response=response;
+          throw error;
+      } 
+    }catch (error) {
+            console.error(error)
+    }
+    }
   return (
     <Container className="new-blog-container">
-      <Form className="mt-5">
+      <Form className="mt-5" onSubmit={(e)=>sendPost(e)}>
         <Form.Group controlId="blog-form" className="mt-3">
           <Form.Label>Titolo</Form.Label>
           <Form.Control size="lg" placeholder="Title" />

@@ -39,7 +39,7 @@ const BlogList = props => {
             marginBottom: 50,
           }}
         >
-          <BlogItem key={post.title} {...post} />
+          <BlogItem key={post.title} post={post} />
         </Col>
       ))}
     </Row>

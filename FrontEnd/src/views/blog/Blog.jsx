@@ -7,19 +7,23 @@ import BlogLike from "../../components/likes/BlogLike";
 import "./styles.css";
 import { API_URL } from "../../globaldata/globaldata";
 const Blog = props => {
-  const [blog, setBlog] = useState({});
+  // const [blog, setBlog] = useState({});
+  let blog={};
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
 
 async function downLoadpost(id){
+  console.log(API_URL+'/blogPosts/'+id)
   try {
     const response = await fetch(API_URL+'/blogPosts/'+id)
     let result= await response.json();
-    setBlog(result);
+    blog = result;
+    console.log('result è : ',result)
+    console.log('blog al momento:',blog)
     if(response.ok){
         //messaggio di evvenuto inserimento
-        
+        console.log('risposta ok')
     }else{
         const error = new Error(`HTTP Error! Status: ${response.status}`)
         error.response=response;
@@ -34,14 +38,17 @@ async function downLoadpost(id){
     const { id } = params;
     console.log('fetch su id:'+id)
     downLoadpost(id);
+    console.log(blog.readTime)
 
 
+    console.log('controllo :',blog)
     if (blog) {
-      setBlog(blog);
+      // setBlog(blog);
       setLoading(false);
       console.log(blog);
     } else {
-      navigate("/404");
+      // navigate("/404");
+      console.log('404')
     }
   }, []);
 
@@ -56,7 +63,7 @@ async function downLoadpost(id){
 
           <div className="blog-details-container">
             <div className="blog-details-author">
-              <BlogAuthor {...blog.author} />
+              {/* <BlogAuthor {...blog.author} /> */}
             </div>
             <div className="blog-details-info">
               <div>{blog.createdAt}</div>
