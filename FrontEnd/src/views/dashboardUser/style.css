@@ -1,0 +1,13 @@
+.avatar{
+    width: 200px;
+    height:200px;    
+    position:relative;
+    background-color: gray;
+}
+.avatar:hover::after{
+    position:absolute;
+    top:50%;
+    left:50%;
+    content: 'Cambia la tua immagine';
+    background-color: black;
+}

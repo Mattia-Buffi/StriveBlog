@@ -5,14 +5,9 @@ import { useState } from "react";
 export const UserSetting=createContext(null)
 export default function UserSettingProvider({children}){
     
-    const textUser={
-        nome: 'Mattia',
-        cognome: 'Bfhh',
-        avatar:'https://res.cloudinary.com/dmskelaj2/image/upload/v1713803537/authors/mattia.png'
-    };
-    
-    const [userSetting,setUserSetting]=useState(textUser)
+    const [userSetting,setUserSetting]=useState(null)
     const value={userSetting,setUserSetting}
+    //verifica del local storage
     return(
         <UserSetting.Provider value={value}>
             {children}

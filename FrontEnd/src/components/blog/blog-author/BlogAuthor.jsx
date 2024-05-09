@@ -13,7 +13,7 @@ const BlogAuthor = ({author}) => {
       </Col>
       <Col>
         <div>di</div>
-        <h6 onClick={()=>navigate('/author/'+author._id)} >{author.nome + author.cognome}</h6>
+        <h6 onClick={()=>navigate('/author/'+author._id)}>{author.nome+' '+author.cognome}</h6>
       </Col>
     </Row>
   );

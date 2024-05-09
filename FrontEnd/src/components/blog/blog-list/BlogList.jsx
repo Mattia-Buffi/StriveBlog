@@ -1,19 +1,24 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-// import posts from "../../../data/posts.json";
 import BlogItem from "../blog-item/BlogItem";
 import { useState } from "react";
 import { API_URL } from "../../../globaldata/globaldata";
+import { useParams } from "react-router-dom";
 //fare la fetch al datbase per recuperare i post
 
 
-const BlogList = props => {
+const BlogList = ({singleAuthor = false}) => {
+  //se prop true modifico l'endpoint per ottenere la lista dei posts ma di un singolo autore altrimenti 
+  // punto all'endpoint generale
+
+  const params=useParams()
   const [posts,setPosts]=useState([])
   const [loader,setLoader]=useState(false)
   async function downloadPosts(){
-    //loader
+   
+    //loader skeleton
     try {
-      let response= await fetch(API_URL+'/blogPosts');
+      let response= await fetch(API_URL+(singleAuthor?('/authors/'+params.id):'')+'blogPosts/home');
       if(response.ok){
         setPosts(await response.json());
         console.log(posts);

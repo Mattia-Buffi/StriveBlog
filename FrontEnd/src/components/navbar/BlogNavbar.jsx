@@ -1,18 +1,19 @@
 import React, { useContext, useState } from "react";
 import { Button, Container, Navbar , Nav} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import "./styles.css";
 import { UserSetting } from "../../context/UserSettingProvider";
 import LoginModal from "../loginmodal/LoginModal";
 
-
 const NavBar = props => {
   const [show,setShow]=useState(false)
+  const navigate=useNavigate()
   const handleShow=()=>setShow(true)
 
   // se contesto generale settato come true abilito il 
   const {userSetting}=useContext(UserSetting)
+  console.log(userSetting);
   return (
   <> 
     <Navbar expand="lg" className="blog-navbar" fixed="top">
@@ -23,13 +24,13 @@ const NavBar = props => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-            <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/">Blog</Nav.Link>
-            <Nav.Link href="/author">Author</Nav.Link>
-            {userSetting!==null && <Nav.Link href="/author">My Posts</Nav.Link>}
+            <Nav.Item onClick={()=>navigate('/')}>Home</Nav.Item>
+            <Nav.Item onClick={()=>navigate('/blogPosts')}>Blog</Nav.Item>
+            <Nav.Item onClick={()=>navigate('/authrs')}>Authors</Nav.Item>
+            {userSetting!==null && <Nav.Item onClick={()=>navigate('/author/'+userSetting.author._id+'/posts')}>My Posts</Nav.Item>}
         </Nav>
         </Navbar.Collapse>
-        {userSetting==null && (
+        {!userSetting && (
         <>
           <Button variant="outline-dark" onClick={handleShow}>
             Log In
@@ -40,7 +41,7 @@ const NavBar = props => {
           </Button>
           <Button as={Link} to="/dashboardUser" className="bg-dark mx-2 border-dark">Sign UP</Button>
         </>)}
-        {userSetting!==null &&(
+        {userSetting &&(
           <>
             <Button variant="outline-dark" className="border-0" as={Link} to="/new">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -58,7 +59,7 @@ const NavBar = props => {
               <span className="ms-1">Trend</span>
             </Button>
             <Button variant="outline-dark" className="border-0 p-1">
-              <img width={24} height={24} src={userSetting?.avatar??''} className="bg-gray rounded-circle border-dark border-2" />
+              <img width={24} height={24} src={userSetting.author?.avatar??''} className="bg-gray rounded-circle border-dark border-2" />
             </Button>
           </>
         )

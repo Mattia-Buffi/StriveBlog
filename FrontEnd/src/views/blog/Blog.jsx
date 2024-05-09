@@ -6,24 +6,24 @@ import BlogLike from "../../components/likes/BlogLike";
 // import posts from "../../data/posts.json";
 import "./styles.css";
 import { API_URL } from "../../globaldata/globaldata";
+import Commenti from "../../components/commenti/Commenti";
 const Blog = props => {
-  // const [blog, setBlog] = useState({});
-  let blog={};
+  const [blog, setBlog] = useState();
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
+  const { id } = params;
 
-async function downLoadpost(id){
+const downLoadpost = async ()=>{
   console.log(API_URL+'/blogPosts/'+id)
   try {
     const response = await fetch(API_URL+'/blogPosts/'+id)
     let result= await response.json();
-    blog = result;
-    console.log('result è : ',result)
-    console.log('blog al momento:',blog)
+    setBlog(result)
     if(response.ok){
         //messaggio di evvenuto inserimento
         console.log('risposta ok')
+        setLoading(false)
     }else{
         const error = new Error(`HTTP Error! Status: ${response.status}`)
         error.response=response;
@@ -35,21 +35,12 @@ async function downLoadpost(id){
 }
 
   useEffect(() => {
-    const { id } = params;
-    console.log('fetch su id:'+id)
     downLoadpost(id);
-    console.log(blog.readTime)
-
-
-    console.log('controllo :',blog)
-    if (blog) {
-      // setBlog(blog);
-      setLoading(false);
-      console.log(blog);
-    } else {
-      // navigate("/404");
-      console.log('404')
-    }
+    // if (blog) {
+    //   console.log(blog);
+    // } else {
+    //   navigate("/404");
+    // }
   }, []);
 
   if (loading) {
@@ -63,7 +54,7 @@ async function downLoadpost(id){
 
           <div className="blog-details-container">
             <div className="blog-details-author">
-              {/* <BlogAuthor {...blog.author} /> */}
+              <BlogAuthor author={blog.author}/>
             </div>
             <div className="blog-details-info">
               <div>{blog.createdAt}</div>
@@ -73,7 +64,7 @@ async function downLoadpost(id){
                   marginTop: 20,
                 }}
               >
-                <BlogLike defaultLikes={["123"]} onChange={console.log} />
+                <BlogLike defaultLikes={blog.likes} onChange={console.log} />
               </div>
             </div>
           </div>
@@ -83,7 +74,7 @@ async function downLoadpost(id){
               __html: blog.content,
             }}
           ></div>
-          <div><h3>Commenti</h3></div>
+          <Commenti />
           {/* mappare tutti i commenti con commnet area e single comment */}
         </Container>
       </div>

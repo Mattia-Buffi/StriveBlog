@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
-import { Form , Row , Col , Button , Container} from 'react-bootstrap'
+import "./style.css";
+import { Form , Row , Col , Button , Container , Image} from 'react-bootstrap'
 import { API_URL } from '../../globaldata/globaldata';
+
+// accesso con profilo gia creto e modifica delle proprie informazioni
+//caricare i dati e 
+
+
 
 export default function DashboardUser({isNew}) {
   let author={}
@@ -14,7 +20,7 @@ export default function DashboardUser({isNew}) {
       description:'Write some word about you',
     }
   }else{
-    //fect per recupero dati di compilazione cosi da fare una modifica 
+    //fect per recupero dati di compilazione cosi da fare una modifica dei soli dati inseriti
   }
   const [nome,setNome]=useState();
   const [cognome,setCognome]=useState();
@@ -24,28 +30,27 @@ export default function DashboardUser({isNew}) {
   const [birth,setBirth]=useState();
   const [avatarImg,setAvatarImg]=useState();
 
-
   const sendToServer= async (e)=>{
     e.preventDefault();
-    let userBody={
-      nome: nome,
-      cognome: cognome,
-      email: email,
-      password:password,
-      dataNascita: birth,
-      description: descript,
-      avatar:null,
-    }
-    console.log(userBody);
-    console.log(API_URL)
+    console.log('invio')
+    let data={
+      "nome": nome,
+      "cognome": cognome,
+      "email": email,
+      "password": password,
+      "description": descript,
+      "dataNascita": birth}
+    let formData= new FormData()
+    formData.append('data',JSON.stringify(data))
+    formData.append('avatar',avatarImg);
+
     try {
-      const response = await fetch(API_URL+'/authors/',{
+      const response = await fetch(API_URL+'/sign/new',{
         method:"POST",
-        body: JSON.stringify(userBody),
-        headers:{ 'content-type': 'application/JSON' }
+        body: formData,
       })
-      let result= await response.json();
-      console.log(result);
+      // let result= await response.json();
+      // console.log(result);
       if(response.ok){
           //messaggio di evvenuto inserimento
           
@@ -61,6 +66,11 @@ export default function DashboardUser({isNew}) {
 
   return (
     <Container style={{marginTop:120}}>
+      <Row>
+        <Col>
+          <Image src={author.avatar} className="avatar m-3" roundedCircle />
+        </Col>
+      </Row>
     <Form name="formNewUser" onSubmit={(e)=>sendToServer(e)}>
       <Row className="mb-3">
         <Form.Group as={Col} controlId="newName">
@@ -91,8 +101,8 @@ export default function DashboardUser({isNew}) {
         </Form.Group>
 
         <Form.Group as={Col} controlId="newImg">
-          <Form.Label>Immagine profilo</Form.Label>
-          <Form.Control type="file" name="avatar" value={avatarImg} onChange={(e)=>setAvatarImg(e.target.value)} />
+          <Form.Label>Carica il tuo avatar</Form.Label>
+          <Form.Control type="file" onChange={(e)=>setAvatarImg(e.target.files[0])} />
         </Form.Group>
       </Row>
 
