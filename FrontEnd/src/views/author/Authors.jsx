@@ -3,12 +3,16 @@ import { Container, Row , Col } from 'react-bootstrap'
 import AuthorCard from '../../components/author/AuthorCard'
 import { API_URL } from '../../globaldata/globaldata'
 import { useState } from 'react'
+import { useContext } from 'react'
+import { UserSetting } from '../../context/UserSettingProvider'
 
 export default function Authors() {
   const [authorsList,setAuthorList]=useState()
+  const {userSetting}=useContext(UserSetting)
+  let tokenAuth='Bearer '+userSetting.token
   const downloadList = async ()=>{
     try {
-      const response = await fetch(API_URL+'/authors/')
+      const response = await fetch(API_URL+'/authors/',{headers:{"Authorization":tokenAuth}})
       let result= await response.json();
       console.log(result)
       setAuthorList(result)

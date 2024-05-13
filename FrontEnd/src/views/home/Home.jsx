@@ -9,9 +9,10 @@ import { UserSetting } from "../../context/UserSettingProvider";
 const Home = props => {
   const {userSetting}=useContext(UserSetting)
   return (
-    <Container fluid="sm" className="d-flex justify-content-center h-100">
-      <h1 className="blog-main-title mb-3">Benvenuto sullo Strive Blog!</h1>
+    <Container fluid="sm" className="h-100">
+      <h1 className="blog-main-title mb-3 d-block">Benvenuto sullo Strive Blog!</h1>
       {userSetting && <BlogList />}
+      
     </Container>
   );
 };

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { Button } from "react-bootstrap";
+import { UserSetting } from "../../context/UserSettingProvider";
 
-const yourUserId = "123";
-//user id dal context
 
 export default function BlogLike({ defaultLikes, onChange }) {
+  const {userSetting}=useContext(UserSetting)
+  const yourUserId=userSetting.author._id
   const [likes, setLikes] = useState(defaultLikes);
   const iLikedThisArticle = likes.includes(yourUserId);
   const toggleLike = () => {

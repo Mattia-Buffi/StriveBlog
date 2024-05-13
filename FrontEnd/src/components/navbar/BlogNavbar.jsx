@@ -5,6 +5,8 @@ import logo from "../../assets/logo.png";
 import "./styles.css";
 import { UserSetting } from "../../context/UserSettingProvider";
 import LoginModal from "../loginmodal/LoginModal";
+import MessageToUser from "../MessageToUser";
+import { MessageUser } from "../../context/MessageProvider";
 
 const NavBar = props => {
   const [show,setShow]=useState(false)
@@ -13,7 +15,7 @@ const NavBar = props => {
 
   // se contesto generale settato come true abilito il 
   const {userSetting}=useContext(UserSetting)
-  console.log(userSetting);
+  const {messageUser}=useContext(MessageUser)
   return (
   <> 
     <Navbar expand="lg" className="blog-navbar" fixed="top">
@@ -25,9 +27,11 @@ const NavBar = props => {
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
             <Nav.Item onClick={()=>navigate('/')}>Home</Nav.Item>
-            <Nav.Item onClick={()=>navigate('/blogPosts')}>Blog</Nav.Item>
-            <Nav.Item onClick={()=>navigate('/authrs')}>Authors</Nav.Item>
-            {userSetting!==null && <Nav.Item onClick={()=>navigate('/author/'+userSetting.author._id+'/posts')}>My Posts</Nav.Item>}
+            {userSetting!==null && (<>
+                <Nav.Item onClick={()=>navigate('/blogPosts')}>Blog</Nav.Item>
+                <Nav.Item onClick={()=>navigate('/authors')}>Authors</Nav.Item>
+                <Nav.Item onClick={()=>navigate('/author/'+userSetting.author._id+'/posts')}>My Posts</Nav.Item>
+                </>)}
         </Nav>
         </Navbar.Collapse>
         {!userSetting && (
@@ -67,6 +71,7 @@ const NavBar = props => {
       </Container>
     </Navbar>
     <LoginModal show={show} setShow={setShow}/>
+    <MessageToUser messageUser={messageUser} />
   </>
   );
 };

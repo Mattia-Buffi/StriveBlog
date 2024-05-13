@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container, Image } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import BlogAuthor from "../../components/blog/blog-author/BlogAuthor";
@@ -7,22 +7,24 @@ import BlogLike from "../../components/likes/BlogLike";
 import "./styles.css";
 import { API_URL } from "../../globaldata/globaldata";
 import Commenti from "../../components/commenti/Commenti";
+import { UserSetting } from "../../context/UserSettingProvider";
 const Blog = props => {
   const [blog, setBlog] = useState();
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
   const { id } = params;
+  const {userSetting}=useContext(UserSetting)
+  let tokenAuth='Bearer '+userSetting.token
 
 const downLoadpost = async ()=>{
-  console.log(API_URL+'/blogPosts/'+id)
   try {
-    const response = await fetch(API_URL+'/blogPosts/'+id)
+    const response = await fetch(API_URL+'/blogPosts/'+id,{headers:{"Authorization":tokenAuth}})
     let result= await response.json();
     setBlog(result)
     if(response.ok){
         //messaggio di evvenuto inserimento
-        console.log('risposta ok')
+        console.log(result)
         setLoading(false)
     }else{
         const error = new Error(`HTTP Error! Status: ${response.status}`)
@@ -32,6 +34,23 @@ const downLoadpost = async ()=>{
   }catch (error) {
           console.error(error)
   }
+}
+const loadLike=async (likes)=>{
+  try{
+    const response = await fetch(API_URL+'/blogPosts/'+id+'/liked',{
+                          method:'PATCH',
+                          body: JSON.stringify({likes:likes}),
+                          headers:{"Authorization":tokenAuth},"content-type":"application/json"})
+    if(response.ok){
+        const result=await response.json()
+        //messaggio di evvenuto inserimento
+        console.log(result)
+    }else{
+        const error = new Error(`HTTP Error! Status: ${response.status}`)
+        error.response=response;
+        throw error;
+    }
+  }catch(err){console.error(err)}
 }
 
   useEffect(() => {
@@ -64,7 +83,7 @@ const downLoadpost = async ()=>{
                   marginTop: 20,
                 }}
               >
-                <BlogLike defaultLikes={blog.likes} onChange={console.log} />
+                <BlogLike defaultLikes={blog.likes} onChange={loadLike} />
               </div>
             </div>
           </div>
@@ -74,7 +93,7 @@ const downLoadpost = async ()=>{
               __html: blog.content,
             }}
           ></div>
-          <Commenti />
+          <Commenti comments={blog.comments} />
           {/* mappare tutti i commenti con commnet area e single comment */}
         </Container>
       </div>

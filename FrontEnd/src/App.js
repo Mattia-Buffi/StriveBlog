@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import NavBar from "./components/navbar/BlogNavbar";
 import Footer from "./components/footer/Footer";
 import Home from "./views/home/Home";
@@ -9,13 +9,17 @@ import DashboardUser from "./views/dashboardUser/DashboardUser";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserSettingProvider from "./context/UserSettingProvider";
 import AuthorPosts from "./views/author/AuthorPosts";
+import MessageProvider, { MessageUser } from "./context/MessageProvider";
+import MessageToUser from "./components/MessageToUser";
 
 
 function App() {
-  //verificare il login dell'utente 
+  //verificare il login dell'utente nel local storage
   //creare context
+  // const{messageUser}=useContext(MessageUser)
   return (
     <UserSettingProvider>
+    <MessageProvider>
     <Router>
       <NavBar />
       <Routes>
@@ -27,8 +31,10 @@ function App() {
         <Route path="/dashboardUser/:id" element={<DashboardUser isNew={false}/>}/>
         <Route path="/new" element={<NewBlogPost />} />
       </Routes>
+      {/* <MessageToUser messageUser={messageUser} /> */}
       <Footer />
     </Router>
+    </MessageProvider>
     </UserSettingProvider>
   );
 }

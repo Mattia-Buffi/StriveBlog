@@ -6,9 +6,11 @@ import "./styles.css";
 import draftToHtml from "draftjs-to-html"
 import { API_URL } from "../../globaldata/globaldata";
 import { UserSetting } from "../../context/UserSettingProvider";
+import { useNavigate } from "react-router-dom";
 
 const NewBlogPost = props => {
   const {userSetting}=useContext(UserSetting)
+  const navigate=useNavigate()
   const [text, setText] = useState("");
   const handleChange = useCallback(value => {
     setText(draftToHtml(value));
@@ -17,6 +19,14 @@ const [category,setCategory]=useState()
 const [title,setTitle]=useState()
 const [cover,setCover]=useState()
 const [readTime,setReadTime]=useState()
+
+const resetAllState=()=>{
+  setText('');
+  setCategory('')
+  setTitle('')
+  setCover()
+  setReadTime({})
+}
 
 //calcolo del tempo di lettura
 const calcTime=(art)=>{
@@ -43,21 +53,20 @@ async function sendPost(e){
     content: text,
   }
   let tokenAuth='Bearer '+userSetting.token;
-  console.log(newPostText);
-  console.log('Bearer '+userSetting.token)
+  console.log(newPostText)
   let newPost= new FormData()
   newPost.append('data',JSON.stringify(newPostText))
   newPost.append('cover',cover);
     try {
       const response = await fetch(API_URL+'/blogPosts/new',{
         method:"POST",
-        body: JSON.stringify(newPostText),
+        body: newPost,
         headers:{"Authorization": tokenAuth}
       })
       let result= await response.json();
       console.log(result);
       if(response.ok){
-          //messaggio di evvenuto inserimento
+          navigate('/blog/'+result._id)
           
       }else{
           const error = new Error(`HTTP Error! Status: ${response.status}`)
@@ -79,7 +88,7 @@ async function sendPost(e){
         <Form.Group as={Col} controlId="blog-category" className="mt-3">
           <Form.Label>Categoria</Form.Label>
           <Form.Control as="select" value={category} onChange={(e)=>setCategory(e.target.value)}>
-            <option>Sport</option>
+            <option selected >Sport</option>
             <option>Food</option>
             <option>Music</option>
             <option>Tech</option>
@@ -97,7 +106,7 @@ async function sendPost(e){
           <Editor value={text} onChange={handleChange} className="new-blog-content" />
         </Form.Group>
         <Form.Group className="d-flex mt-3 justify-content-end">
-          <Button type="reset" size="lg" variant="outline-dark">
+          <Button type="reset" size="lg" variant="outline-dark" onClick={resetAllState}>
             Reset
           </Button>
           <Button
