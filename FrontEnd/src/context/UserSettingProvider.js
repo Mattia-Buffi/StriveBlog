@@ -5,7 +5,10 @@ import { useState } from "react";
 export const UserSetting=createContext(null)
 export default function UserSettingProvider({children}){
     
-    const [userSetting,setUserSetting]=useState(null)
+    let remenberLog=localStorage.getItem("userLog")
+    if(remenberLog) remenberLog=JSON.parse(remenberLog)
+    const [userSetting,setUserSetting]=useState(remenberLog)
+    
     const value={userSetting,setUserSetting}
     //verifica del local storage
     return(

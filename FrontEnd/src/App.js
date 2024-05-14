@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import NavBar from "./components/navbar/BlogNavbar";
 import Footer from "./components/footer/Footer";
 import Home from "./views/home/Home";
@@ -9,8 +9,7 @@ import DashboardUser from "./views/dashboardUser/DashboardUser";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserSettingProvider from "./context/UserSettingProvider";
 import AuthorPosts from "./views/author/AuthorPosts";
-import MessageProvider, { MessageUser } from "./context/MessageProvider";
-import MessageToUser from "./components/MessageToUser";
+import MessageProvider from "./context/MessageProvider"
 
 
 function App() {
@@ -24,6 +23,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" exact element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/blog/:id" element={<Blog />} />
         <Route path="/authors" element={<Authors/>} />
         <Route path="/author/:id/posts" element={<AuthorPosts/>} />

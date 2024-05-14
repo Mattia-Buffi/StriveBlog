@@ -14,8 +14,14 @@ const NavBar = props => {
   const handleShow=()=>setShow(true)
 
   // se contesto generale settato come true abilito il 
-  const {userSetting}=useContext(UserSetting)
+  const {userSetting,setUserSetting}=useContext(UserSetting)
   const {messageUser}=useContext(MessageUser)
+  const handleLogout =()=>{
+    localStorage.removeItem("userLog")
+    setUserSetting({});
+    navigate("/")
+    navigate(0)
+  }
   return (
   <> 
     <Navbar expand="lg" className="blog-navbar" fixed="top">
@@ -63,7 +69,10 @@ const NavBar = props => {
               <span className="ms-1">Trend</span>
             </Button>
             <Button variant="outline-dark" className="border-0 p-1">
-              <img width={24} height={24} src={userSetting.author?.avatar??''} className="bg-gray rounded-circle border-dark border-2" />
+              <img width={24} height={24} alt={'avatar profile'} src={userSetting.author?.avatar??''} className="bg-gray rounded-circle border-dark border-2" />
+            </Button>
+            <Button variant="outline-dark" className="border-0 p-1" onClick={handleLogout}>
+            <span className="ms-1">Log Out</span>
             </Button>
           </>
         )

@@ -35,16 +35,16 @@ const downLoadpost = async ()=>{
           console.error(error)
   }
 }
-const loadLike=async (likes)=>{
+const loadLike=async ()=>{
   try{
     const response = await fetch(API_URL+'/blogPosts/'+id+'/liked',{
-                          method:'PATCH',
-                          body: JSON.stringify({likes:likes}),
-                          headers:{"Authorization":tokenAuth},"content-type":"application/json"})
+                          method:'POST',
+                          headers:{"Authorization":tokenAuth}})
     if(response.ok){
         const result=await response.json()
         //messaggio di evvenuto inserimento
         console.log(result)
+        blog.likes=result;
     }else{
         const error = new Error(`HTTP Error! Status: ${response.status}`)
         error.response=response;

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Modal , Form , Button} from 'react-bootstrap'
 import { useState } from 'react'
-import DashboardUser from '../../views/dashboardUser/DashboardUser'
 import { API_URL } from '../../globaldata/globaldata'
 import { useContext } from 'react'
 import {UserSetting} from '../../context/UserSettingProvider'
@@ -15,14 +14,14 @@ export default function LoginModal({show,setShow}) {
   const handleClose=()=>setShow(false)
 
   //funzione di verifica corrispondenza credenziali
-  function handleSubmit(e){
-    e.preventDefault();
-    if(e.currentTarget.checkValidity()===false){
-      e.stopPropagation();
-    }
-    setValidation(true)
-    if(e.currentTarget.checkValidity()) getAuthorization();
-  }
+  // function handleSubmit(e){
+  //   e.preventDefault();
+  //   if(e.currentTarget.checkValidity()===false){
+  //     e.stopPropagation();
+  //   }
+  //   setValidation(true)
+  //   if(e.currentTarget.checkValidity()) getAuthorization();
+  // }
   async function getAuthorization(e){
     e.preventDefault();
     const keys={email: email, password: password}
@@ -39,6 +38,7 @@ export default function LoginModal({show,setShow}) {
           //messaggio di evvenuto logIn
           console.log(result);
           //salvataggio in local
+          localStorage.setItem("userLog",JSON.stringify(result))
           //aggiotnamento context
           setUserSetting(result);
           handleClose();
@@ -72,6 +72,7 @@ export default function LoginModal({show,setShow}) {
         </Button>
         </Form>
         {/* <DashboardUser isNew={false}/> */}
+        <Button onClick={()=>window.open(API_URL+'/sign/googleLogin',"_self")}>Sign with Google</Button>
         </Modal.Body>
     </Modal>
   )
